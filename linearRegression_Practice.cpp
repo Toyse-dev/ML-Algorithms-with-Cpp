@@ -1,8 +1,7 @@
 #include <iostream>
 #include <vector>
 
-//First function: Predict one sample
-double prediction(const std::vector<double>& weight,
+double predictOne(const std::vector<double>& weight,
 	double bias,
 	const std::vector<double>& x) {
 		double predict = bias;
@@ -26,6 +25,16 @@ double prediction(const std::vector<double>& weight,
 			results.push_back(predict);
 		}
 		return results;
+	}
+	
+	//Loss function
+	double computeLoss(const std::vector<double>& predictions, const std::vector<double>& actual) {
+		double total = 0.0;
+		for (size_t i = 0; i < predictions.size(); ++i) {
+			double error = predictions[i] - actual[i];
+			total += error * error;
+		}
+		return total / predictions.size();
 	}
 
 int main () {
