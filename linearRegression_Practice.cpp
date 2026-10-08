@@ -1,18 +1,14 @@
 #include <iostream>
 #include <vector>
 
-double predictOne(const std::vector<double>& weight,
-	double bias,
-	const std::vector<double>& x) {
-		double predict = bias;
-		
-		for (size_t j = 0; j < weight.size(); ++j) {
-			predict += weight[j] * x[j];
-		}
-		return predict;
+double predictOne(const std::vector<double>& x, const std::vector<double>& w, double b) {
+	double total = b;
+	for (size_t i = 0; i < w.size(); ++i) {
+		total += w[i] * x[i];
 	}
-	
-	// Predict many
+	return total;
+}
+
 std::vector<double> predictMany(const std::vector<std::vector<double>>& X, std::vector<double>& weight, double bias) {
 	std::vector<double> results;
 	for (const auto& row : X) {
@@ -32,11 +28,13 @@ int main() {
 	
 	std::vector<double> predictions = predictMany(X, w, b);
 
-	// Print calculations step by step 
+	// Print calculation steps
 	for (size_t i = 0; i < X.size(); ++i) {
 		std::cout << "Sample " << i << ": bias (" << b << ")";
 		for (size_t j = 0; j < w.size(); ++j) {
-			std::cout << " + " << w[j] << "x" << X[i][j];
+			// Handles negative weight instead of just + -1
+			if (w[j] >= 0) std::cout << " + " << w[j] << " * " << X[i][j];
+			else std::cout << " - " << -w[j] << " * " << X[i][j];
 		}
 		std::cout << " = " << predictions[i] << std::endl;
 	}
